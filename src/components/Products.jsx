@@ -37,13 +37,17 @@ function Products() {
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     setPage(1); // Reset to first page for new search
-    navigate(`/?category=${category}&search=${e.target.value}&page=1`);
+    navigate(`/?search=${e.target.value}&page=1`); // Remove category to show all
   };
 
   // Handle category change and update URL
   const handleCategoryChange = (category) => {
     setPage(1); // Reset to first page for new category
-    navigate(`/?category=${category}&search=${searchTerm}&page=1`);
+    if (category === 'All') {
+      navigate(`/?search=${searchTerm}&page=1`); // Remove category to show all
+    } else {
+      navigate(`/?category=${category}&search=${searchTerm}&page=1`);
+    }
   };
 
   // Handle pagination
@@ -82,8 +86,10 @@ function Products() {
         {products.length > 0 ? (
           products.map((product) => (
             <li key={product.id} className="border p-4">
+              <img src={product.thumbnail} alt={product.title} className="w-full h-40 object-cover mb-2"/>
               <h3 className="font-bold">{product.title}</h3>
               <p>{product.description}</p>
+              <p className="text-gray-500">${product.price}</p>
             </li>
           ))
         ) : (
